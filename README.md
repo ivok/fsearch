@@ -4,8 +4,8 @@ Add package repository
 ```json
 "repositories": [
     {
-        "type": "path",
-        "url": "../fsearch"
+        "type": "vcs",
+        "url": "https://github.com/ivok/fsearch.git"
     }
 ],
 ```
