@@ -1,4 +1,4 @@
-### Instalation
+### Installation
 
 Add package repository
 ```json
