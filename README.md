@@ -3,7 +3,6 @@
 Add package repository
 ```json
 "repositories": [
-    ...
     {
         "type": "path",
         "url": "../fsearch"
