@@ -4,7 +4,6 @@ namespace Fsearch;
 
 use Fsearch\Console\FsearchCommand;
 use Illuminate\Support\ServiceProvider;
-use Fsearch\Http\FsearchController;
 
 class FsearchServiceProvider extends ServiceProvider
 {

@@ -82,6 +82,7 @@
         ::placeholder {
             color: #c6c8ca;
         }
+
         table {
             clear: both;
             margin: 30px auto;
@@ -103,24 +104,7 @@
             FSearch
         </div>
         <p>Search resutls</p>
-            @if(is_array($result) && !empty($result))
-            <table>
-                @foreach ($result as $item)
-                <tr>
-                    <td style="text-align: left">
-                        <strong>{{ $item['file'] }}</strong>
-                        <ul>
-                            @foreach($item['lines'] as $line)
-                                <li>{{ $line }}</li>
-                            @endforeach
-                        </ul>
-                    </td>
-                </tr>
-                @endforeach
-            </table>
-            @else
-                <p style="margin: 30px auto; font-size: 1.4em"><big>{{ !empty($result) ? $result : 'Nothing found...' }}</big></p>
-            @endif
+        <h1>Directory not found</h1>
         <a class="button" href="{{ route('fs.home') }}">Go back</a>
     </div>
 </div>

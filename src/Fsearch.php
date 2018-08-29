@@ -8,7 +8,7 @@
 
 namespace Fsearch;
 
-use Illuminate\Support\Facades\App;
+use Fsearch\Exception\DirectoryNotFoundException;
 
 class Fsearch
 {
@@ -35,34 +35,14 @@ class Fsearch
     /**
      * @param $content
      * @param $path
-     * @return string
+     * @return array
+     * @throws \Exception
      */
     public function search($content, $path)
     {
-        try {
-            $this->setPath($path);
-            $this->setContent($content);
-            return $this->doSearch();
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     *
-     */
-    public function consoleOutput()
-    {
-        if (App::runningInConsole()) {
-            foreach ($this->result as $item) {
-                $file = $item['file'];
-                echo "\033[01;36m $file \033[0m" . ":\n";
-                foreach ($item['lines'] as $line) {
-                    echo "\033[01;30m $line \033[0m" . "\n";
-                }
-                echo "\n\n";
-            }
-        }
+        $this->setPath($path);
+        $this->setContent($content);
+        return $this->doSearch();
     }
 
     /**
@@ -71,10 +51,9 @@ class Fsearch
     protected function doSearch()
     {
         $directoryIterator = new \RecursiveDirectoryIterator($this->path);
-        $iterator = new \RecursiveIteratorIterator($directoryIterator);
-        foreach (new \RecursiveIteratorIterator($directoryIterator) as $file) {
-            if (in_array(pathinfo($file, PATHINFO_EXTENSION), self::ALLOWED_FILES)) {
-                $this->readContent($file);
+        foreach (new \RecursiveIteratorIterator($directoryIterator) as $filePath) {
+            if (in_array(pathinfo($filePath, PATHINFO_EXTENSION), self::ALLOWED_FILES)) {
+                $this->readContent($filePath);
             }
         }
         return $this->result;
@@ -83,13 +62,13 @@ class Fsearch
     /**
      * @param $file
      */
-    protected function readContent($file)
+    protected function readContent($filePath)
     {
-        $contents = file_get_contents($file);
+        $contents = file_get_contents($filePath);
         $pattern = "/^.*$this->content.*\$/m";
         if (preg_match_all($pattern, $contents, $matches)) {
             $this->result[] = [
-                'file' => $file,
+                'file' => $filePath,
                 'lines' => $matches[0]
             ];
         }
@@ -106,7 +85,7 @@ class Fsearch
         }
 
         if (!is_dir($path)) {
-            throw new \Exception('Invalid directory');
+            throw new DirectoryNotFoundException('Invalid directory');
         }
 
         $this->path = realpath($path);
