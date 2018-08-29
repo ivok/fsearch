@@ -1,0 +1,31 @@
+{
+    "name": "ivo/fsearch",
+    "description": "Search files by content",
+    "authors": [
+        {
+            "name": "Ivo",
+            "email": "ivokuzov@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Fsearch\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FsearchTests\\": "tests/"
+        }
+    },
+    "require": {},
+	"extra": {
+        "laravel": {
+            "providers": [
+                "Fsearch\\FsearchServiceProvider"
+            ],
+            "aliases": {
+                "Fsearch": "Fsearch\\Facade\\Fsearch"
+            }
+        }
+    }
+}
