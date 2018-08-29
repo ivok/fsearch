@@ -53,25 +53,32 @@ class Fsearch
         $directoryIterator = new \RecursiveDirectoryIterator($this->path);
         foreach (new \RecursiveIteratorIterator($directoryIterator) as $filePath) {
             if (in_array(pathinfo($filePath, PATHINFO_EXTENSION), self::ALLOWED_FILES)) {
-                $this->readContent($filePath);
+                $matches = $this->readContent($filePath);
+                if (!empty($matches)) {
+                    $this->result[] = [
+                        'file' => $filePath,
+                        'lines' => $matches
+                    ];
+                }
             }
         }
         return $this->result;
     }
 
     /**
-     * @param $file
+     * @param $filePath
+     * @return array|null
      */
     protected function readContent($filePath)
     {
-        $contents = file_get_contents($filePath);
-        $pattern = "/^.*$this->content.*\$/m";
-        if (preg_match_all($pattern, $contents, $matches)) {
-            $this->result[] = [
-                'file' => $filePath,
-                'lines' => $matches[0]
-            ];
+        $lines = null;
+        $file = new \SplFileObject($filePath);
+        while (!$file->eof()) {
+            if (preg_match("/^.*$this->content.*\$/m", $file->fgets(), $matches)) {
+                $lines[] = $matches[0];
+            }
         }
+        return $lines;
     }
 
     /**
