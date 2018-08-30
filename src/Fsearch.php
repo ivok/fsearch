@@ -15,7 +15,7 @@ class Fsearch
     /**
      * Това може и в конфигурация да се изнесе
      */
-    const ALLOWED_FILES = ['php'];
+    const ALLOWED_FILES = ['txt'];
 
     /**
      * @var string
